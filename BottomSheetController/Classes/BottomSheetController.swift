@@ -7,15 +7,6 @@
 
 import UIKit
 
-public extension UIViewController {
-	func addBottomSheet(_ bottomSheetController: BottomSheetController) {
-		self.addChild(bottomSheetController)
-		self.view.addSubview(bottomSheetController.view)
-		bottomSheetController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-		bottomSheetController.didMove(toParent: self)
-	}
-}
-
 @objc
 public enum BottomSheetPanDirection: Int {
 	case up, down
@@ -34,58 +25,35 @@ public protocol BottomSheetControllerDelegate {
 	@objc optional func bottomSheetAnimationDidEnd(bottomSheetController: BottomSheetController, viewController: UIViewController)
 }
 
-public class BottomSheetController: UIViewController {
+public class BottomSheetController: NSObject {
 	// MARK: Properties
 	public weak var delegate: BottomSheetControllerDelegate?
 	
+	private var mainViewController: UIViewController!
 	private var sheetViewController: UIViewController!
 	private var config: BottomSheetConfiguration!
 	
 	private var sheetAnimator: UIDynamicAnimator!
 	private var panGesture: UIPanGestureRecognizer!
 	private var allowsContentScrolling: Bool!
-	// MARK: Initializers
-	private override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-		panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
-		sheetAnimator = UIDynamicAnimator(referenceView: view)
-		panGesture.delegate = self
-		sheetAnimator.delegate = self
-	}
-	internal required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-}
-
-// MARK: Initializers
-public extension BottomSheetController {
-	convenience init(sheet sheetViewController: UIViewController,
-					 configuration config: BottomSheetConfiguration) {
-		self.init()
+	
+	public init(main mainViewController: UIViewController,
+				sheet sheetViewController: UIViewController,
+				configuration config: BottomSheetConfiguration) {
+		super.init()
+		self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
+		self.sheetAnimator = UIDynamicAnimator(referenceView: mainViewController.view)
+		self.panGesture.delegate = self
+		self.sheetAnimator.delegate = self
+		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
 		self.prepareSheetForPresentation()
-	}
-	convenience init(main mainViewController: UIViewController,
-					 sheet sheetViewController: UIViewController,
-					 configuration config: BottomSheetConfiguration) {
-		self.init(sheet: sheetViewController, configuration: config)
-		mainViewController.addChild(self)
-		mainViewController.view.addSubview(self.view)
-		self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-		self.didMove(toParent: mainViewController)
 	}
 }
 
 // MARK: Public Methods
 public extension BottomSheetController {
-	override func addChild(_ childController: UIViewController) {
-		super.addChild(childController)
-		view.addSubview(childController.view)
-		childController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-		childController.didMove(toParent: self)
-		config?.scrollableView?.panGestureRecognizer.require(toFail: panGesture)
-	}
 	func expand() {
 		sheetAnimator.removeAllBehaviors()
 		moveSheet(to: config.minYBound)
@@ -99,7 +67,11 @@ public extension BottomSheetController {
 // MARK: - Private Methods
 private extension BottomSheetController {
 	func prepareSheetForPresentation() {
-		addChild(sheetViewController)
+		mainViewController.addChild(sheetViewController)
+		mainViewController.view.addSubview(sheetViewController.view)
+		sheetViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+		sheetViewController.didMove(toParent: mainViewController)
+		config.scrollableView?.panGestureRecognizer.require(toFail: panGesture)
 		sheetViewController.view.frame.origin = CGPoint(x: 0, y: config.initialY)
 		sheetViewController.view.frame.size = CGSize(
 			width: UIScreen.main.bounds.width,
@@ -125,7 +97,7 @@ private extension BottomSheetController {
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
 		let finalHeight = UIScreen.main.bounds.height - y
 		let anchorY = y + finalHeight/2
-		let targetPoint = CGPoint(x: view.center.x, y: anchorY)
+		let targetPoint = CGPoint(x: mainViewController.view.center.x, y: anchorY)
 		let behavior = BottomSheetBehavior(
 			item: sheetViewController.view,
 			targetPoint: targetPoint,
@@ -152,8 +124,8 @@ private extension BottomSheetController {
 // MARK: - Pan Gestures
 private extension BottomSheetController {
 	@objc func panGestureHandler(_ recognizer: UIPanGestureRecognizer) {
-		var translation = recognizer.translation(in: view)
-		var velocity = recognizer.velocity(in: view)
+		var translation = recognizer.translation(in: mainViewController.view)
+		var velocity = recognizer.velocity(in: mainViewController.view)
 		velocity.x = 0
 		let direction: BottomSheetPanDirection = velocity.y < 0 ? .up : .down
 		let newY = sheetViewController.view.frame.minY + translation.y
