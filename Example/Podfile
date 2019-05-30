@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'BottomSheetController_Example' do
+  pod 'BottomSheetController', :path => '../'
+
+  target 'BottomSheetController_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
