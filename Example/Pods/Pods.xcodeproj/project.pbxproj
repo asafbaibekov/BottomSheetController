@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		05D61142222EAD2E500991696097D72E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
 		2A34AD9260B1A8BE6BCEDC58A02EBCA2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
+		2DF90323229FCE4000CF86ED /* BottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9031B229FCD0A00CF86ED /* BottomSheetController.swift */; };
+		2DF90324229FCE4300CF86ED /* BottomSheetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF9031D229FCD4A00CF86ED /* BottomSheetConfiguration.swift */; };
+		2DF90325229FCE4600CF86ED /* BottomSheetBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF90321229FCD8500CF86ED /* BottomSheetBehavior.swift */; };
 		4788E77E3AE073012C87DC7C8E1241EF /* Pods-BottomSheetController_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A83962C172FE15ACD8FAF4A28D52F38D /* Pods-BottomSheetController_Example-dummy.m */; };
-		51BDEECC244CB93400A08EA6FF190082 /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B6BCEB316D2B66C6F9B125FAA44816 /* ReplaceMe.swift */; };
 		553C52BA126B9AB4D8877E017BD766FB /* BottomSheetController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 36E8FFCA6C59165E1855B9280B017D69 /* BottomSheetController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		73D7463A447B5A15D74E407D39E588C9 /* BottomSheetController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8900A0176BD9F5B153FAB9CCBA728777 /* BottomSheetController-dummy.m */; };
 		778F3B08E76456CD666171596CFA8584 /* Pods-BottomSheetController_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7E10AB72A947424797912EF48EE1E0C1 /* Pods-BottomSheetController_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,8 +43,10 @@
 		16571BB5737C244BB92019BAC4E3E464 /* Pods-BottomSheetController_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BottomSheetController_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		1B7AC7D49AF50E8659B546A9F00AB5E4 /* Pods-BottomSheetController_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BottomSheetController_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		1C849D70BE658B1F89D31853871F13C1 /* Pods-BottomSheetController_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BottomSheetController_Example-frameworks.sh"; sourceTree = "<group>"; };
-		23B6BCEB316D2B66C6F9B125FAA44816 /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ReplaceMe.swift; path = BottomSheetController/Classes/ReplaceMe.swift; sourceTree = "<group>"; };
 		2C240639EF5FCAAB7C3187F9F27681B3 /* Pods-BottomSheetController_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BottomSheetController_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		2DF9031B229FCD0A00CF86ED /* BottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BottomSheetController.swift; path = BottomSheetController/Classes/BottomSheetController.swift; sourceTree = "<group>"; };
+		2DF9031D229FCD4A00CF86ED /* BottomSheetConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BottomSheetConfiguration.swift; path = BottomSheetController/Classes/BottomSheetConfiguration.swift; sourceTree = "<group>"; };
+		2DF90321229FCD8500CF86ED /* BottomSheetBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BottomSheetBehavior.swift; path = BottomSheetController/Classes/BottomSheetBehavior.swift; sourceTree = "<group>"; };
 		3231EFD206654CBEFBF9CE4C6D16F919 /* BottomSheetController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BottomSheetController.xcconfig; sourceTree = "<group>"; };
 		36E8FFCA6C59165E1855B9280B017D69 /* BottomSheetController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BottomSheetController-umbrella.h"; sourceTree = "<group>"; };
 		3F8EC00EB6A629333E1C2BCB394FCF45 /* Pods-BottomSheetController_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BottomSheetController_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -146,7 +150,9 @@
 		9685B7371421C0DA79DB8561B3B81CB1 /* BottomSheetController */ = {
 			isa = PBXGroup;
 			children = (
-				23B6BCEB316D2B66C6F9B125FAA44816 /* ReplaceMe.swift */,
+				2DF9031B229FCD0A00CF86ED /* BottomSheetController.swift */,
+				2DF9031D229FCD4A00CF86ED /* BottomSheetConfiguration.swift */,
+				2DF90321229FCD8500CF86ED /* BottomSheetBehavior.swift */,
 				E9FC5BFCF49A7846EA0715E1C2D69D5C /* Pod */,
 				FC5CFC957C5C5E83967DF665AF4D7007 /* Support Files */,
 			);
@@ -319,6 +325,9 @@
 					436B1E8E82486EB350B96389B17D3900 = {
 						LastSwiftMigration = 1020;
 					};
+					DF4BCAC989CB9A615557E4334F80AB84 = {
+						LastSwiftMigration = 1020;
+					};
 				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
@@ -378,8 +387,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DF90323229FCE4000CF86ED /* BottomSheetController.swift in Sources */,
+				2DF90324229FCE4300CF86ED /* BottomSheetConfiguration.swift in Sources */,
+				2DF90325229FCE4600CF86ED /* BottomSheetBehavior.swift in Sources */,
 				73D7463A447B5A15D74E407D39E588C9 /* BottomSheetController-dummy.m in Sources */,
-				51BDEECC244CB93400A08EA6FF190082 /* ReplaceMe.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +459,7 @@
 			baseConfigurationReference = 06CF7D33550751A9313275E774D85D11 /* Pods-BottomSheetController_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -470,6 +482,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -513,6 +526,7 @@
 			baseConfigurationReference = 1B7AC7D49AF50E8659B546A9F00AB5E4 /* Pods-BottomSheetController_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -535,6 +549,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
