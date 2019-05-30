@@ -38,6 +38,6 @@ This library helps to show ViewController as bottom sheet
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit'
-  s.swift-version = "5.0"
+  s.swift_version = "5.0"
   # s.dependency 'AFNetworking', '~> 2.3'
 end
