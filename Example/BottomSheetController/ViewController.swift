@@ -47,10 +47,6 @@ extension ViewController: BottomSheetConfiguration {
 		return UIScreen.main.bounds.height - 150
 	}
 	
-	var automaticallyAdjustSheetSize: Bool {
-		return true
-	}
-	
 	var scrollableView: UIScrollView? {
 		return self.bottomViewController!.tableView
 	}
