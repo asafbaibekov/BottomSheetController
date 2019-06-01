@@ -9,39 +9,37 @@ import UIKit
 
 internal class BottomSheetBehavior: UIDynamicBehavior {
 	let item: UIDynamicItem
-	let itemBehavior: UIDynamicItemBehavior
-	let attachmentBehavior: UIAttachmentBehavior
-	
-	init(item dynamicItem: UIDynamicItem,
-		 targetPoint: CGPoint,
-		 velocity: CGPoint,
-		 onAnimationStep: ((_ minY: CGFloat) -> Void)? = nil) {
-		item = dynamicItem
-		itemBehavior = UIDynamicItemBehavior(items: [item])
-		attachmentBehavior = UIAttachmentBehavior(item: item, attachedToAnchor: .zero)
-		super.init()
-		action = {
-			guard let view = self.item as? UIView else { return }
-			view.frame.size = CGSize(
-				width: UIScreen.main.bounds.width,
-				height: UIScreen.main.bounds.height - view.frame.minY
-			)
-			view.layoutIfNeeded()
-			onAnimationStep?(view.frame.minY)
-		}
-		attachmentBehavior.frequency = 3.5
-		attachmentBehavior.damping = 0.4
-		attachmentBehavior.length = 0
+	let y: CGFloat
+	let velocity: CGPoint
+
+	lazy var itemBehavior: UIDynamicItemBehavior = {
+		let itemBehavior = UIDynamicItemBehavior(items: [item])
 		itemBehavior.density = 100
 		itemBehavior.resistance = 10
-		attachmentBehavior.anchorPoint = targetPoint
 		itemBehavior.addLinearVelocity(
-			CGPoint(
-				x: velocity.x - itemBehavior.linearVelocity(for: item).x,
-				y: velocity.y - itemBehavior.linearVelocity(for: item).y
-			),
+			CGPoint(x: velocity.x - itemBehavior.linearVelocity(for: item).x,
+					y: velocity.y - itemBehavior.linearVelocity(for: item).y),
 			for: item
 		)
+		return itemBehavior
+	}()
+
+	lazy var attachmentBehavior: UIAttachmentBehavior = {
+		let attachmentBehavior = UIAttachmentBehavior(item: item, attachedToAnchor: .zero)
+		attachmentBehavior.anchorPoint = CGPoint(
+			x: item.center.x,
+			y: y + (UIScreen.main.bounds.height - y) / 2
+		)
+		attachmentBehavior.damping = 0.4
+		attachmentBehavior.length = 0
+		return attachmentBehavior
+	}()
+
+	init(item: UIDynamicItem, to y: CGFloat, with velocity: CGPoint) {
+		self.item = item
+		self.y = y
+		self.velocity = velocity
+		super.init()
 		addChildBehavior(attachmentBehavior)
 		addChildBehavior(itemBehavior)
 	}

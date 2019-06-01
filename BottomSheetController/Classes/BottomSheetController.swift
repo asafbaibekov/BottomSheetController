@@ -98,22 +98,14 @@ private extension BottomSheetController {
 		self.allowsContentScrolling = y == config.minYBound
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
-		let finalHeight = UIScreen.main.bounds.height - y
-		let anchorY = y + finalHeight/2
-		let targetPoint = CGPoint(x: mainViewController.view.center.x, y: anchorY)
-		let behavior = BottomSheetBehavior(
-			item: sheetViewController.view,
-			targetPoint: targetPoint,
-			velocity: velocity,
-			onAnimationStep: { newY in
-				self.delegate?.bottomSheet?(
-					bottomSheetController: self,
-					viewController: self.sheetViewController,
-					didMoveTo: newY,
-					direction: direction
-				)
+		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: y, with: velocity)
+		behavior.action = { [unowned self] in
+			if let view = self.sheetViewController.view {
+				view.frame.size = CGSize(width: UIScreen.main.bounds.width,
+										 height: UIScreen.main.bounds.height - view.frame.minY)
+				view.layoutIfNeeded()
 			}
-		)
+		}
 		delegate?.bottomSheet?(
 			bottomSheetController: self,
 			viewController: sheetViewController,
