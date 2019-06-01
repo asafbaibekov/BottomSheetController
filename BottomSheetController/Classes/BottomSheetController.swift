@@ -30,7 +30,31 @@ public class BottomSheetController: NSObject {
 	public weak var delegate: BottomSheetControllerDelegate?
 	
 	private var mainViewController: UIViewController!
-	private var sheetViewController: UIViewController!
+	public var sheetViewController: UIViewController! {
+		didSet {
+			animator.removeAllBehaviors()
+			UIView.animate(
+				withDuration: 0.25,
+				animations: {
+					oldValue.view.frame.origin.y = UIScreen.main.bounds.height
+				},
+				completion: { completed in
+					guard completed else { return }
+					oldValue.willMove(toParent: nil)
+					oldValue.view.removeFromSuperview()
+					oldValue.removeFromParent()
+					self.prepareSheetForPresentation()
+					self.sheetViewController.view.frame.origin.y = UIScreen.main.bounds.height
+					UIView.animate(
+						withDuration: 0.25,
+						animations: {
+							self.sheetViewController.view.frame.origin.y = self.config.initialY
+						}
+					)
+				}
+			)
+		}
+	}
 	private var config: BottomSheetConfiguration!
 	
 	private lazy var animator: UIDynamicAnimator = {
