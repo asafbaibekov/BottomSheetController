@@ -38,15 +38,17 @@ public class BottomSheetController: NSObject {
 		animator.delegate = self
 		return animator
 	}()
-	private var panGesture: UIPanGestureRecognizer!
+	private lazy var panGesture: UIPanGestureRecognizer = {
+		let pan = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
+		pan.delegate = self
+		return pan
+	}()
 	private var allowsContentScrolling: Bool!
 	
 	public init(main mainViewController: UIViewController,
 				sheet sheetViewController: UIViewController,
 				configuration config: BottomSheetConfiguration) {
 		super.init()
-		self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
-		self.panGesture.delegate = self
 		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
