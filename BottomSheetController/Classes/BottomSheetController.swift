@@ -33,7 +33,11 @@ public class BottomSheetController: NSObject {
 	private var sheetViewController: UIViewController!
 	private var config: BottomSheetConfiguration!
 	
-	private var sheetAnimator: UIDynamicAnimator!
+	private lazy var animator: UIDynamicAnimator = {
+		let animator = UIDynamicAnimator(referenceView: mainViewController.view)
+		animator.delegate = self
+		return animator
+	}()
 	private var panGesture: UIPanGestureRecognizer!
 	private var allowsContentScrolling: Bool!
 	
@@ -42,9 +46,7 @@ public class BottomSheetController: NSObject {
 				configuration config: BottomSheetConfiguration) {
 		super.init()
 		self.panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureHandler))
-		self.sheetAnimator = UIDynamicAnimator(referenceView: mainViewController.view)
 		self.panGesture.delegate = self
-		self.sheetAnimator.delegate = self
 		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
@@ -55,11 +57,9 @@ public class BottomSheetController: NSObject {
 // MARK: Public Methods
 public extension BottomSheetController {
 	func expand() {
-		sheetAnimator.removeAllBehaviors()
 		moveSheet(to: config.minYBound)
 	}
 	func collapse() {
-		sheetAnimator.removeAllBehaviors()
 		moveSheet(to: config.maxYBound)
 	}
 }
@@ -92,6 +92,7 @@ private extension BottomSheetController {
 		sheetViewController.view.layoutIfNeeded()
 	}
 	func moveSheet(to y: CGFloat, velocity: CGPoint = .zero) {
+		animator.removeAllBehaviors()
 		self.allowsContentScrolling = y == config.minYBound
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
@@ -117,7 +118,7 @@ private extension BottomSheetController {
 			animationWillStart: y,
 			direction: direction
 		)
-		sheetAnimator.addBehavior(behavior)
+		animator.addBehavior(behavior)
 	}
 }
 
@@ -147,7 +148,7 @@ private extension BottomSheetController {
 		}
 		recognizer.setTranslation(.zero, in: sheetViewController.view)
 		switch recognizer.state {
-		case .began: sheetAnimator.removeAllBehaviors()
+		case .began: animator.removeAllBehaviors()
 		case .ended:
 			let targetY = config.nextY(from: sheetViewController.view.frame.minY, panDirection: direction)
 			moveSheet(to: targetY, velocity: velocity)
