@@ -99,12 +99,17 @@ private extension BottomSheetController {
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
 		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: y, with: velocity)
-		behavior.action = { [unowned self] in
-			if let view = self.sheetViewController.view {
-				view.frame.size = CGSize(width: UIScreen.main.bounds.width,
-										 height: UIScreen.main.bounds.height - view.frame.minY)
-				view.layoutIfNeeded()
-			}
+		behavior.action = {
+			let view = self.sheetViewController.view!
+			view.frame.size = CGSize(width: UIScreen.main.bounds.width,
+									 height: UIScreen.main.bounds.height - view.frame.minY)
+			view.layoutIfNeeded()
+			self.delegate?.bottomSheet?(
+				bottomSheetController: self,
+				viewController: self.sheetViewController,
+				didMoveTo: view.frame.minY,
+				direction: direction
+			)
 		}
 		delegate?.bottomSheet?(
 			bottomSheetController: self,
