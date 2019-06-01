@@ -30,6 +30,7 @@ internal class BottomSheetBehavior: UIDynamicBehavior {
 			x: item.center.x,
 			y: y + (UIScreen.main.bounds.height - y) / 2
 		)
+		attachmentBehavior.frequency = 3.5
 		attachmentBehavior.damping = 0.4
 		attachmentBehavior.length = 0
 		return attachmentBehavior
