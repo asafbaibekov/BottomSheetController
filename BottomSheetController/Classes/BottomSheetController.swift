@@ -153,7 +153,7 @@ private extension BottomSheetController {
 		velocity.x = 0
 		let direction: BottomSheetPanDirection = velocity.y < 0 ? .up : .down
 		let newY = sheetViewController.view.frame.minY + translation.y
-		if config.canMoveTo(newY) {
+		if newY >= config.minYBound && newY <= config.maxYBound {
 			delegate?.bottomSheet?(
 				bottomSheetController: self,
 				viewController: sheetViewController,

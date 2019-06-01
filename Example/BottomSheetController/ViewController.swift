@@ -51,10 +51,6 @@ extension ViewController: BottomSheetConfiguration {
 		return self.bottomViewController!.tableView
 	}
 	
-	func canMoveTo(_ y: CGFloat) -> Bool {
-		return y >= minYBound && y <= maxYBound
-	}
-	
 	func nextY(from currentY: CGFloat,
 			   panDirection direction: BottomSheetPanDirection) -> CGFloat {
 		let screenMidY = UIScreen.main.bounds.height / 2
