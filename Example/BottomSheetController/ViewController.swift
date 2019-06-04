@@ -40,7 +40,7 @@ extension ViewController: BottomSheetConfiguration {
 	}
 	
 	var minYBound: CGFloat {
-		return 20
+		return 0
 	}
 	
 	var maxYBound: CGFloat {

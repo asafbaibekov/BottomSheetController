@@ -119,10 +119,14 @@ private extension BottomSheetController {
 	}
 	func moveSheet(to y: CGFloat, velocity: CGPoint = .zero) {
 		animator.removeAllBehaviors()
-		self.allowsContentScrolling = y == config.minYBound
+		var topPadding: CGFloat = 0
+		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
+			topPadding = window.safeAreaInsets.top
+		}
+		self.allowsContentScrolling = y == config.minYBound + topPadding
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
-		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: y, with: velocity)
+		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: y + topPadding, with: velocity)
 		behavior.action = {
 			let view = self.sheetViewController.view!
 			view.frame.size = CGSize(width: UIScreen.main.bounds.width,
