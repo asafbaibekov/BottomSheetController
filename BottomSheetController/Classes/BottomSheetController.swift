@@ -123,14 +123,15 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		self.allowsContentScrolling = y == config.minYBound + topPadding
+		self.allowsContentScrolling = y == config.minYBound
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
-		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: y + topPadding, with: velocity)
+		let finalY = 0...topPadding ~= y ? y + topPadding : y
+		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: finalY, with: velocity)
 		behavior.action = {
 			let view = self.sheetViewController.view!
 			view.frame.size = CGSize(width: UIScreen.main.bounds.width,
-									 height: UIScreen.main.bounds.height - view.frame.minY)
+									 height: UIScreen.main.bounds.height - ceil(view.frame.minY))
 			view.layoutIfNeeded()
 			self.delegate?.bottomSheet?(
 				bottomSheetController: self,
