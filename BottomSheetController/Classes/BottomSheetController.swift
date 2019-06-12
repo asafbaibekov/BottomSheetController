@@ -56,7 +56,8 @@ public class BottomSheetController: NSObject {
 		}
 	}
 	private var config: BottomSheetConfiguration
-	private var isTotallyExpanded: Bool
+	@objc public private(set) dynamic var isTotallyExpanded: Bool
+	@objc public private(set) dynamic var isTotallyCollapsed: Bool
 
 	private lazy var animator: UIDynamicAnimator = {
 		let animator = UIDynamicAnimator(referenceView: mainViewController.view)
@@ -76,6 +77,7 @@ public class BottomSheetController: NSObject {
 		self.sheetViewController = sheetViewController
 		self.config = config
 		self.isTotallyExpanded = config.initialY == config.minYBound
+		self.isTotallyCollapsed = config.initialY == config.maxYBound
 		super.init()
 		self.prepareSheetForPresentation()
 	}
@@ -124,6 +126,7 @@ private extension BottomSheetController {
 			topPadding = window.safeAreaInsets.top
 		}
 		self.isTotallyExpanded = y == config.minYBound
+		self.isTotallyCollapsed = y == config.maxYBound
 		let currentY = sheetViewController.view.frame.minY
 		sheetViewController.view.frame.size.height += currentY == UIScreen.main.bounds.height ? 1 : 0
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
