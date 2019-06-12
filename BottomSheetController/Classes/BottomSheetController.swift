@@ -56,7 +56,7 @@ public class BottomSheetController: NSObject {
 		}
 	}
 	private var config: BottomSheetConfiguration
-	private var allowsContentScrolling: Bool
+	private var isTotallyExpanded: Bool
 
 	private lazy var animator: UIDynamicAnimator = {
 		let animator = UIDynamicAnimator(referenceView: mainViewController.view)
@@ -75,7 +75,7 @@ public class BottomSheetController: NSObject {
 		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
-		self.allowsContentScrolling = config.initialY == config.minYBound
+		self.isTotallyExpanded = config.initialY == config.minYBound
 		super.init()
 		self.prepareSheetForPresentation()
 	}
@@ -123,7 +123,7 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		self.allowsContentScrolling = y == config.minYBound
+		self.isTotallyExpanded = y == config.minYBound
 		let currentY = sheetViewController.view.frame.minY
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
 		let finalY = 0...topPadding ~= y ? y + topPadding : y
@@ -197,7 +197,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
 		let offsetY = scrollableView.contentOffset.y
 		let isBouncing = offsetY < 0
 		let isDragingDown = panGesture.velocity(in: panGesture.view).y >= 0
-		return (isBouncing && isDragingDown) || (offsetY == 0 && isDragingDown) || !self.allowsContentScrolling
+		return (isBouncing && isDragingDown) || (offsetY == 0 && isDragingDown) || !self.isTotallyExpanded
 	}
 }
 
