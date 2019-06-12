@@ -125,6 +125,7 @@ private extension BottomSheetController {
 		}
 		self.isTotallyExpanded = y == config.minYBound
 		let currentY = sheetViewController.view.frame.minY
+		sheetViewController.view.frame.size.height += currentY == UIScreen.main.bounds.height ? 1 : 0
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
 		let finalY = 0...topPadding ~= y ? y + topPadding : y
 		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: finalY, with: velocity)
