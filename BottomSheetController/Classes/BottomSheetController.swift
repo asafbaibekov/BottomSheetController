@@ -29,8 +29,8 @@ public class BottomSheetController: NSObject {
 	// MARK: Properties
 	public weak var delegate: BottomSheetControllerDelegate?
 	
-	private var mainViewController: UIViewController!
-	public var sheetViewController: UIViewController! {
+	private var mainViewController: UIViewController
+	public var sheetViewController: UIViewController {
 		didSet {
 			animator.removeAllBehaviors()
 			UIView.animate(
@@ -55,8 +55,9 @@ public class BottomSheetController: NSObject {
 			)
 		}
 	}
-	private var config: BottomSheetConfiguration!
-	
+	private var config: BottomSheetConfiguration
+	private var allowsContentScrolling: Bool
+
 	private lazy var animator: UIDynamicAnimator = {
 		let animator = UIDynamicAnimator(referenceView: mainViewController.view)
 		animator.delegate = self
@@ -67,15 +68,15 @@ public class BottomSheetController: NSObject {
 		pan.delegate = self
 		return pan
 	}()
-	private var allowsContentScrolling: Bool!
 	
 	public init(main mainViewController: UIViewController,
 				sheet sheetViewController: UIViewController,
 				configuration config: BottomSheetConfiguration) {
-		super.init()
 		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
+		self.allowsContentScrolling = config.initialY == config.minYBound
+		super.init()
 		self.prepareSheetForPresentation()
 	}
 }
@@ -104,7 +105,6 @@ private extension BottomSheetController {
 			height: UIScreen.main.bounds.height - sheetViewController.view.frame.minY
 		)
 		sheetViewController.view.addGestureRecognizer(panGesture)
-		self.allowsContentScrolling = config.initialY == config.minYBound
 	}
 	func translateSheetView(with translation: CGPoint) {
 		sheetViewController.view.frame.origin = CGPoint(
@@ -205,13 +205,13 @@ extension BottomSheetController: UIDynamicAnimatorDelegate {
 	public func dynamicAnimatorDidPause(_ animator: UIDynamicAnimator) {
 		delegate?.bottomSheetAnimationDidEnd?(
 			bottomSheetController: self,
-			viewController: sheetViewController!
+			viewController: sheetViewController
 		)
 	}
 	public func dynamicAnimatorWillResume(_ animator: UIDynamicAnimator) {
 		delegate?.bottomSheetAnimationDidStart?(
 			bottomSheetController: self,
-			viewController: sheetViewController!
+			viewController: sheetViewController
 		)
 	}
 }
