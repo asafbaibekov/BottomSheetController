@@ -130,8 +130,9 @@ private extension BottomSheetController {
 		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: finalY, with: velocity)
 		behavior.action = {
 			let view = self.sheetViewController.view!
-			view.frame.size = CGSize(width: UIScreen.main.bounds.width,
-									 height: UIScreen.main.bounds.height - ceil(view.frame.minY))
+			var height = UIScreen.main.bounds.height - ceil(view.frame.minY)
+			height = height <= 0 ? 0.01 : height + 1
+			view.frame.size = CGSize(width: UIScreen.main.bounds.width, height: height)
 			view.layoutIfNeeded()
 			self.delegate?.bottomSheet?(
 				bottomSheetController: self,
