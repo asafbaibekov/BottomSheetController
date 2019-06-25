@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol BottomSheetConfiguration {
+public protocol BottomSheetConfiguration: class {
 	var initialY: CGFloat { get }
 	var minYBound: CGFloat { get }
 	var maxYBound: CGFloat { get }

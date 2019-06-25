@@ -29,7 +29,7 @@ public class BottomSheetController: NSObject {
 	// MARK: Properties
 	public weak var delegate: BottomSheetControllerDelegate?
 	
-	private var mainViewController: UIViewController
+	private weak var mainViewController: UIViewController!
 	public var sheetViewController: UIViewController {
 		didSet {
 			animator.removeAllBehaviors()
@@ -55,7 +55,7 @@ public class BottomSheetController: NSObject {
 			)
 		}
 	}
-	private var config: BottomSheetConfiguration
+	private weak var config: BottomSheetConfiguration!
 	@objc public private(set) dynamic var isTotallyExpanded: Bool
 	@objc public private(set) dynamic var isTotallyCollapsed: Bool
 
