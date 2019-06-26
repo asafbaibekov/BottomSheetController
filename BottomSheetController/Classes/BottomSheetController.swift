@@ -197,7 +197,7 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		topPadding += config.minYBound
+		topPadding += 0...topPadding ~= config.minYBound ? config.minYBound : 0
 		if newY >= topPadding && newY <= config.maxYBound {
 			self.handleBackgroundView()
 			delegate?.bottomSheet?(
