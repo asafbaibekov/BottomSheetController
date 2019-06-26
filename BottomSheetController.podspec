@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'BottomSheetController'
-  s.version          = '0.1.8'
+  s.version          = '0.2.0'
   s.summary          = 'This library helps to show ViewController as bottom sheet'
 
 # This description is used to generate tags and improve search results.
