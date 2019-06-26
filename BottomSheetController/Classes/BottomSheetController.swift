@@ -45,12 +45,8 @@ public class BottomSheetController: NSObject {
 					oldValue.removeFromParent()
 					self.prepareSheetForPresentation()
 					self.sheetViewController.view.frame.origin.y = UIScreen.main.bounds.height
-					UIView.animate(
-						withDuration: 0.25,
-						animations: {
-							self.sheetViewController.view.frame.origin.y = self.config.initialY
-						}
-					)
+					self.handleBackgroundView()
+					self.moveSheet(to: self.config.initialY)
 				}
 			)
 		}
