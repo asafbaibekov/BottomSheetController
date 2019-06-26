@@ -163,7 +163,12 @@ private extension BottomSheetController {
 		velocity.x = 0
 		let direction: BottomSheetPanDirection = velocity.y < 0 ? .up : .down
 		let newY = sheetViewController.view.frame.minY + translation.y
-		if newY >= config.minYBound && newY <= config.maxYBound {
+		var topPadding: CGFloat = 0
+		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
+			topPadding = window.safeAreaInsets.top
+		}
+		topPadding += config.minYBound
+		if newY >= topPadding && newY <= config.maxYBound {
 			delegate?.bottomSheet?(
 				bottomSheetController: self,
 				viewController: sheetViewController,
