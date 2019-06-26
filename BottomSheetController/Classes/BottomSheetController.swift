@@ -139,7 +139,8 @@ private extension BottomSheetController {
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
 		let finalY = 0...topPadding ~= y ? y + topPadding : y
 		let behavior = BottomSheetBehavior(item: sheetViewController.view, to: finalY, with: velocity)
-		behavior.action = {
+		behavior.action = { [weak self] in
+			guard let self = self else { return }
 			let view = self.sheetViewController.view!
 			var height = UIScreen.main.bounds.height - ceil(view.frame.minY)
 			height = height <= 0 ? 0.01 : height + 1
