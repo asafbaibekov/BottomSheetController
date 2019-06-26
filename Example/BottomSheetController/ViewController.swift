@@ -50,7 +50,11 @@ extension ViewController: BottomSheetConfiguration {
 	var scrollableView: UIScrollView? {
 		return self.bottomViewController!.tableView
 	}
-	
+
+	var disableBackground: Bool {
+		return true
+	}
+
 	func nextY(from currentY: CGFloat,
 			   panDirection direction: BottomSheetPanDirection) -> CGFloat {
 		let screenMidY = UIScreen.main.bounds.height / 2

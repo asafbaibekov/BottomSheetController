@@ -12,6 +12,7 @@ public protocol BottomSheetConfiguration: class {
 	var minYBound: CGFloat { get }
 	var maxYBound: CGFloat { get }
 	var scrollableView: UIScrollView? { get }
+	var disableBackground: Bool { get }
 	// MARK: - Methods
 	func nextY(from currentY: CGFloat,
 			   panDirection direction: BottomSheetPanDirection) -> CGFloat

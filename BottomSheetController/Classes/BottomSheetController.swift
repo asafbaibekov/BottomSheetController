@@ -59,6 +59,12 @@ public class BottomSheetController: NSObject {
 	@objc public private(set) dynamic var isTotallyExpanded: Bool
 	@objc public private(set) dynamic var isTotallyCollapsed: Bool
 
+	private lazy var backgroundView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	private lazy var animator: UIDynamicAnimator = {
 		let animator = UIDynamicAnimator(referenceView: mainViewController.view)
 		animator.delegate = self
@@ -107,6 +113,7 @@ private extension BottomSheetController {
 			height: UIScreen.main.bounds.height - sheetViewController.view.frame.minY
 		)
 		sheetViewController.view.addGestureRecognizer(panGesture)
+		self.handleBackgroundView()
 	}
 	func translateSheetView(with translation: CGPoint) {
 		sheetViewController.view.frame.origin = CGPoint(
@@ -138,6 +145,7 @@ private extension BottomSheetController {
 			height = height <= 0 ? 0.01 : height + 1
 			view.frame.size = CGSize(width: UIScreen.main.bounds.width, height: height)
 			view.layoutIfNeeded()
+			self.handleBackgroundView()
 			self.delegate?.bottomSheet?(
 				bottomSheetController: self,
 				viewController: self.sheetViewController,
@@ -152,6 +160,27 @@ private extension BottomSheetController {
 			direction: direction
 		)
 		animator.addBehavior(behavior)
+	}
+	func handleBackgroundView() {
+		guard config.disableBackground else { return }
+		let screenHeight = UIScreen.main.bounds.height
+		let height = screenHeight - ceil(sheetViewController.view.frame.origin.y)
+		let paddingBottom = screenHeight - self.config.maxYBound
+		guard height > paddingBottom + 1 else {
+			backgroundView.removeFromSuperview()
+			return
+		}
+		mainViewController.view.insertSubview(backgroundView, belowSubview: self.sheetViewController.view)
+		let attributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
+		mainViewController.view.addConstraints(attributes.map { NSLayoutConstraint(item: backgroundView, attribute: $0, relatedBy: .equal, toItem: mainViewController.view, attribute: $0, multiplier: 1, constant: 0) })
+		
+		var topPadding: CGFloat = 0
+		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
+			topPadding = window.safeAreaInsets.top
+		}
+		topPadding += self.config.minYBound
+		let precentage = 0.75 * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
+		self.backgroundView.backgroundColor = UIColor.black.withAlphaComponent(precentage)
 	}
 }
 
@@ -169,6 +198,7 @@ private extension BottomSheetController {
 		}
 		topPadding += config.minYBound
 		if newY >= topPadding && newY <= config.maxYBound {
+			self.handleBackgroundView()
 			delegate?.bottomSheet?(
 				bottomSheetController: self,
 				viewController: sheetViewController,
