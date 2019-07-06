@@ -55,6 +55,10 @@ extension ViewController: BottomSheetConfiguration {
 		return true
 	}
 
+	var maxAlphaBackground: CGFloat {
+		return 0.5
+	}
+
 	func nextY(from currentY: CGFloat,
 			   panDirection direction: BottomSheetPanDirection) -> CGFloat {
 		let screenMidY = UIScreen.main.bounds.height / 2

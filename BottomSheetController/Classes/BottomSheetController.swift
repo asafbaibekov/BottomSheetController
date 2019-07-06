@@ -176,7 +176,7 @@ private extension BottomSheetController {
 			topPadding = window.safeAreaInsets.top
 		}
 		topPadding += self.config.minYBound
-		let precentage = 0.75 * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
+		let precentage = self.config.maxAlphaBackground * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
 		self.backgroundView.backgroundColor = UIColor.black.withAlphaComponent(precentage)
 	}
 }
