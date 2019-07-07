@@ -23,6 +23,8 @@ public protocol BottomSheetControllerDelegate {
 	@objc optional func bottomSheetAnimationDidStart(bottomSheetController: BottomSheetController, viewController: UIViewController)
 	
 	@objc optional func bottomSheetAnimationDidEnd(bottomSheetController: BottomSheetController, viewController: UIViewController)
+
+	@objc optional func bottomSheetDidTapBackground(bottomSheetController: BottomSheetController, viewController: UIViewController)
 }
 
 public class BottomSheetController: NSObject {
@@ -58,6 +60,7 @@ public class BottomSheetController: NSObject {
 	private lazy var backgroundView: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleBackgroundViewTap(_:))))
 		return view
 	}()
 
@@ -178,6 +181,9 @@ private extension BottomSheetController {
 		topPadding += self.config.minYBound
 		let precentage = self.config.maxAlphaBackground * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
 		self.backgroundView.backgroundColor = UIColor.black.withAlphaComponent(precentage)
+	}
+	@objc func handleBackgroundViewTap(_ sender: UITapGestureRecognizer) {
+		self.delegate?.bottomSheetDidTapBackground?(bottomSheetController: self, viewController: self.sheetViewController)
 	}
 }
 
