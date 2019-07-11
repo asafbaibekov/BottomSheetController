@@ -48,7 +48,7 @@ public class BottomSheetController: NSObject {
 					self.prepareSheetForPresentation()
 					self.sheetViewController.view.frame.origin.y = UIScreen.main.bounds.height
 					self.handleBackgroundView()
-					self.moveSheet(to: self.config.initialY)
+					self.moveSheet(to: self.config.initialY(bottomSheetController: self))
 				}
 			)
 		}
@@ -81,9 +81,12 @@ public class BottomSheetController: NSObject {
 		self.mainViewController = mainViewController
 		self.sheetViewController = sheetViewController
 		self.config = config
-		self.isTotallyExpanded = config.initialY == config.minYBound
-		self.isTotallyCollapsed = config.initialY == config.maxYBound
+		self.isTotallyExpanded = false
+		self.isTotallyCollapsed = false
 		super.init()
+		let initialY = config.initialY(bottomSheetController: self)
+		self.isTotallyExpanded = initialY == config.minYBound(bottomSheetController: self)
+		self.isTotallyCollapsed = initialY == config.maxYBound(bottomSheetController: self)
 		self.prepareSheetForPresentation()
 	}
 }
@@ -91,10 +94,10 @@ public class BottomSheetController: NSObject {
 // MARK: Public Methods
 public extension BottomSheetController {
 	func expand() {
-		moveSheet(to: config.minYBound)
+		moveSheet(to: config.minYBound(bottomSheetController: self))
 	}
 	func collapse() {
-		moveSheet(to: config.maxYBound)
+		moveSheet(to: config.maxYBound(bottomSheetController: self))
 	}
 }
 
@@ -105,8 +108,9 @@ private extension BottomSheetController {
 		mainViewController.view.addSubview(sheetViewController.view)
 		sheetViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 		sheetViewController.didMove(toParent: mainViewController)
-		config.scrollableView?.panGestureRecognizer.require(toFail: panGesture)
-		sheetViewController.view.frame.origin = CGPoint(x: 0, y: config.initialY)
+		let scrollableView = config.scrollableView(bottomSheetController: self)
+		scrollableView?.panGestureRecognizer.require(toFail: panGesture)
+		sheetViewController.view.frame.origin = CGPoint(x: 0, y: config.initialY(bottomSheetController: self))
 		sheetViewController.view.frame.size = CGSize(
 			width: UIScreen.main.bounds.width,
 			height: UIScreen.main.bounds.height - sheetViewController.view.frame.minY
@@ -131,8 +135,8 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		self.isTotallyExpanded = y == config.minYBound
-		self.isTotallyCollapsed = y == config.maxYBound
+		self.isTotallyExpanded = y == config.minYBound(bottomSheetController: self)
+		self.isTotallyCollapsed = y == config.maxYBound(bottomSheetController: self)
 		let currentY = sheetViewController.view.frame.minY
 		sheetViewController.view.frame.size.height += currentY == UIScreen.main.bounds.height ? 1 : 0
 		let direction: BottomSheetPanDirection = y >= currentY ? .down : .up
@@ -162,10 +166,10 @@ private extension BottomSheetController {
 		animator.addBehavior(behavior)
 	}
 	func handleBackgroundView() {
-		guard config.disableBackground else { return }
+		guard config.disableBackground(bottomSheetController: self) else { return }
 		let screenHeight = UIScreen.main.bounds.height
 		let height = screenHeight - ceil(sheetViewController.view.frame.origin.y)
-		let paddingBottom = screenHeight - self.config.maxYBound
+		let paddingBottom = screenHeight - self.config.maxYBound(bottomSheetController: self)
 		guard height > paddingBottom + 1 else {
 			backgroundView.removeFromSuperview()
 			return
@@ -178,8 +182,9 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		topPadding += self.config.minYBound
-		let precentage = self.config.maxAlphaBackground * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
+		topPadding += self.config.minYBound(bottomSheetController: self)
+		let maxAlphaBackground = self.config.maxAlphaBackground(bottomSheetController: self)
+		let precentage = maxAlphaBackground * (height - paddingBottom) / (screenHeight - paddingBottom - topPadding)
 		self.backgroundView.backgroundColor = UIColor.black.withAlphaComponent(precentage)
 	}
 	@objc func handleBackgroundViewTap(_ sender: UITapGestureRecognizer) {
@@ -199,8 +204,10 @@ private extension BottomSheetController {
 		if #available(iOS 11.0, *), let window = UIApplication.shared.keyWindow {
 			topPadding = window.safeAreaInsets.top
 		}
-		topPadding += 0...topPadding ~= config.minYBound ? config.minYBound : 0
-		if newY >= topPadding && newY <= config.maxYBound {
+		let minYBound = config.minYBound(bottomSheetController: self)
+		let maxYBound = config.maxYBound(bottomSheetController: self)
+		topPadding += 0...topPadding ~= minYBound ? minYBound : 0
+		if newY >= topPadding && newY <= maxYBound {
 			self.handleBackgroundView()
 			delegate?.bottomSheet?(
 				bottomSheetController: self,
@@ -221,7 +228,9 @@ private extension BottomSheetController {
 		switch recognizer.state {
 		case .began: animator.removeAllBehaviors()
 		case .ended:
-			let targetY = config.nextY(from: sheetViewController.view.frame.minY, panDirection: direction)
+			let targetY = config.nextY(bottomSheetController: self,
+									   from: sheetViewController.view.frame.minY,
+									   panDirection: direction)
 			moveSheet(to: targetY, velocity: velocity)
 		default: break
 		}
@@ -234,7 +243,7 @@ extension BottomSheetController: UIGestureRecognizerDelegate {
 	}
 	public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
 		guard
-			let scrollableView = config.scrollableView,
+			let scrollableView = config.scrollableView(bottomSheetController: self),
 			let panGesture = gestureRecognizer as? UIPanGestureRecognizer,
 			scrollableView.frame.contains(panGesture.location(in: panGesture.view)) else { return true }
 		let offsetY = scrollableView.contentOffset.y

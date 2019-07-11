@@ -35,36 +35,29 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: BottomSheetConfiguration {
-	var initialY: CGFloat {
+	func initialY(bottomSheetController: BottomSheetController) -> CGFloat {
 		return UIScreen.main.bounds.height / 2
 	}
-	
-	var minYBound: CGFloat {
+	func minYBound(bottomSheetController: BottomSheetController) -> CGFloat {
 		return 0
 	}
-	
-	var maxYBound: CGFloat {
+	func maxYBound(bottomSheetController: BottomSheetController) -> CGFloat {
 		return UIScreen.main.bounds.height - 150
 	}
-	
-	var scrollableView: UIScrollView? {
+	func scrollableView(bottomSheetController: BottomSheetController) -> UIScrollView? {
 		return self.bottomViewController!.tableView
 	}
-
-	var disableBackground: Bool {
+	func disableBackground(bottomSheetController: BottomSheetController) -> Bool {
 		return true
 	}
-
-	var maxAlphaBackground: CGFloat {
+	func maxAlphaBackground(bottomSheetController: BottomSheetController) -> CGFloat {
 		return 0.5
 	}
-
-	func nextY(from currentY: CGFloat,
-			   panDirection direction: BottomSheetPanDirection) -> CGFloat {
+	func nextY(bottomSheetController: BottomSheetController, from currentY: CGFloat, panDirection direction: BottomSheetPanDirection) -> CGFloat {
 		let screenMidY = UIScreen.main.bounds.height / 2
 		switch direction {
-		case .up: return currentY < screenMidY ? minYBound : screenMidY
-		case .down: return currentY > screenMidY ? maxYBound : screenMidY
+		case .up: return currentY < screenMidY ? minYBound(bottomSheetController: bottomSheetController) : screenMidY
+		case .down: return currentY > screenMidY ? maxYBound(bottomSheetController: bottomSheetController) : screenMidY
 		}
 	}
 }
