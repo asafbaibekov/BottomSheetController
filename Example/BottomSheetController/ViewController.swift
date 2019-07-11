@@ -11,18 +11,13 @@ import BottomSheetController
 
 class ViewController: UIViewController {
 
-	var bottomViewController: BottomViewController!
 	var bottomSheetController: BottomSheetController!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-		self.bottomViewController = BottomViewController(
-			nibName: "BottomViewController",
-			bundle: nil
-		)
 		self.bottomSheetController = BottomSheetController(
 			main: self,
-			sheet: bottomViewController,
+			sheet: BottomViewController(nibName: "BottomViewController", bundle: nil),
 			configuration: self
 		)
     }
@@ -45,7 +40,7 @@ extension ViewController: BottomSheetConfiguration {
 		return UIScreen.main.bounds.height - 150
 	}
 	func scrollableView(bottomSheetController: BottomSheetController) -> UIScrollView? {
-		return self.bottomViewController!.tableView
+		return (bottomSheetController.sheetViewController as? BottomViewController)?.tableView
 	}
 	func disableBackground(bottomSheetController: BottomSheetController) -> Bool {
 		return true
