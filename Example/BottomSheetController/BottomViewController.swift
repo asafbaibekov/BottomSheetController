@@ -15,7 +15,7 @@ class BottomViewController: UIViewController {
 	override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 		roundCorners(view, corners: [.topLeft, .topRight], radius: 12)
-		self.tableView.register(DefualtCell.self, forCellReuseIdentifier: "cell")
+		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		self.tableView.dataSource = self
     }
 
@@ -51,15 +51,5 @@ extension BottomViewController: UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 		cell.textLabel?.text = "Cell \(indexPath.row + 1)"
 		return cell
-	}
-}
-
-class DefualtCell: UITableViewCell {
-	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-		super.init(style: .default, reuseIdentifier: reuseIdentifier)
-	}
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
 	}
 }
