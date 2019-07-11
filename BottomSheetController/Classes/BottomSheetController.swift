@@ -48,7 +48,9 @@ public class BottomSheetController: NSObject {
 					self.prepareSheetForPresentation()
 					self.sheetViewController.view.frame.origin.y = UIScreen.main.bounds.height
 					self.handleBackgroundView()
-					self.moveSheet(to: self.config.initialY(bottomSheetController: self))
+					self.moveSheet(to: self.config.nextY(bottomSheetController: self,
+													from: self.sheetViewController.view.frame.minY,
+													panDirection: .up))
 				}
 			)
 		}
