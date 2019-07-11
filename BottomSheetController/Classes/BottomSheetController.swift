@@ -91,6 +91,10 @@ public class BottomSheetController: NSObject {
 		self.isTotallyCollapsed = initialY == config.maxYBound(bottomSheetController: self)
 		self.prepareSheetForPresentation()
 	}
+	public convenience init(main mainViewController: (UIViewController & BottomSheetConfiguration),
+							sheet sheetViewController: UIViewController) {
+		self.init(main: mainViewController, sheet: sheetViewController, configuration: mainViewController)
+	}
 }
 
 // MARK: Public Methods

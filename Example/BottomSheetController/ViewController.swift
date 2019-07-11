@@ -15,11 +15,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-		self.bottomSheetController = BottomSheetController(
-			main: self,
-			sheet: BottomViewController(nibName: "BottomViewController", bundle: nil),
-			configuration: self
-		)
+		self.bottomSheetController = BottomSheetController(main: self, sheet: BottomViewController(nibName: "BottomViewController", bundle: nil))
     }
 
     override func didReceiveMemoryWarning() {
