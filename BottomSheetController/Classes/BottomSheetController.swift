@@ -86,9 +86,6 @@ public class BottomSheetController: NSObject {
 		self.isTotallyExpanded = false
 		self.isTotallyCollapsed = false
 		super.init()
-		let initialY = config.initialY(bottomSheetController: self)
-		self.isTotallyExpanded = initialY == config.minYBound(bottomSheetController: self)
-		self.isTotallyCollapsed = initialY == config.maxYBound(bottomSheetController: self)
 		self.prepareSheetForPresentation()
 	}
 	public convenience init(main mainViewController: (UIViewController & BottomSheetConfiguration),
@@ -116,12 +113,15 @@ private extension BottomSheetController {
 		sheetViewController.didMove(toParent: mainViewController)
 		let scrollableView = config.scrollableView(bottomSheetController: self)
 		scrollableView?.panGestureRecognizer.require(toFail: panGesture)
-		sheetViewController.view.frame.origin = CGPoint(x: 0, y: config.initialY(bottomSheetController: self))
+		let initialY = config.initialY(bottomSheetController: self)
+		sheetViewController.view.frame.origin = CGPoint(x: 0, y: initialY)
 		sheetViewController.view.frame.size = CGSize(
 			width: UIScreen.main.bounds.width,
 			height: UIScreen.main.bounds.height - sheetViewController.view.frame.minY
 		)
 		sheetViewController.view.addGestureRecognizer(panGesture)
+		self.isTotallyExpanded = initialY == config.minYBound(bottomSheetController: self)
+		self.isTotallyCollapsed = initialY == config.maxYBound(bottomSheetController: self)
 		self.handleBackgroundView()
 	}
 	func translateSheetView(with translation: CGPoint) {
