@@ -8,11 +8,11 @@
 import UIKit
 
 public protocol BottomSheetConfiguration: class {
-	func initialY(bottomSheetController: BottomSheetController) -> CGFloat
-	func minYBound(bottomSheetController: BottomSheetController) -> CGFloat
-	func maxYBound(bottomSheetController: BottomSheetController) -> CGFloat
-	func scrollableView(bottomSheetController: BottomSheetController) -> UIScrollView?
-	func disableBackground(bottomSheetController: BottomSheetController) -> Bool
-	func maxAlphaBackground(bottomSheetController: BottomSheetController) -> CGFloat
-	func nextY(bottomSheetController: BottomSheetController, from currentY: CGFloat, panDirection direction: BottomSheetPanDirection) -> CGFloat
+	func initialY(_ bottomSheetController: BottomSheetController) -> CGFloat
+	func minYBound(_ bottomSheetController: BottomSheetController) -> CGFloat
+	func maxYBound(_ bottomSheetController: BottomSheetController) -> CGFloat
+	func scrollableView(_ bottomSheetController: BottomSheetController) -> UIScrollView?
+	func disableBackground(_ bottomSheetController: BottomSheetController) -> Bool
+	func maxAlphaBackground(_ bottomSheetController: BottomSheetController) -> CGFloat
+	func nextY(_ bottomSheetController: BottomSheetController, from currentY: CGFloat, panDirection direction: BottomSheetPanDirection) -> CGFloat
 }

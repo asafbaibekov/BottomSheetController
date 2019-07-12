@@ -26,29 +26,29 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: BottomSheetConfiguration {
-	func initialY(bottomSheetController: BottomSheetController) -> CGFloat {
+	func initialY(_ bottomSheetController: BottomSheetController) -> CGFloat {
 		return UIScreen.main.bounds.height / 2
 	}
-	func minYBound(bottomSheetController: BottomSheetController) -> CGFloat {
+	func minYBound(_ bottomSheetController: BottomSheetController) -> CGFloat {
 		return 0
 	}
-	func maxYBound(bottomSheetController: BottomSheetController) -> CGFloat {
+	func maxYBound(_ bottomSheetController: BottomSheetController) -> CGFloat {
 		return UIScreen.main.bounds.height - 150
 	}
-	func scrollableView(bottomSheetController: BottomSheetController) -> UIScrollView? {
+	func scrollableView(_ bottomSheetController: BottomSheetController) -> UIScrollView? {
 		return (bottomSheetController.sheetViewController as? BottomViewController)?.tableView
 	}
-	func disableBackground(bottomSheetController: BottomSheetController) -> Bool {
+	func disableBackground(_ bottomSheetController: BottomSheetController) -> Bool {
 		return true
 	}
-	func maxAlphaBackground(bottomSheetController: BottomSheetController) -> CGFloat {
+	func maxAlphaBackground(_ bottomSheetController: BottomSheetController) -> CGFloat {
 		return 0.5
 	}
-	func nextY(bottomSheetController: BottomSheetController, from currentY: CGFloat, panDirection direction: BottomSheetPanDirection) -> CGFloat {
+	func nextY(_ bottomSheetController: BottomSheetController, from currentY: CGFloat, panDirection direction: BottomSheetPanDirection) -> CGFloat {
 		let screenMidY = UIScreen.main.bounds.height / 2
 		switch direction {
-		case .up: return currentY < screenMidY ? minYBound(bottomSheetController: bottomSheetController) : screenMidY
-		case .down: return currentY > screenMidY ? maxYBound(bottomSheetController: bottomSheetController) : screenMidY
+		case .up: return currentY < screenMidY ? minYBound(bottomSheetController) : screenMidY
+		case .down: return currentY > screenMidY ? maxYBound(bottomSheetController) : screenMidY
 		}
 	}
 }
