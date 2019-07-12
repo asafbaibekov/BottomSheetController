@@ -12,11 +12,14 @@ class BottomViewController: UIViewController {
 
 	@IBOutlet weak var tableView: UITableView!
 
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+		self.tableView.dataSource = self
+	}
 	override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 		roundCorners(view, corners: [.topLeft, .topRight], radius: 12)
-		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-		self.tableView.dataSource = self
     }
 
 
