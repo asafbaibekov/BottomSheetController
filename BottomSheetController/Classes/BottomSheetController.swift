@@ -111,6 +111,7 @@ private extension BottomSheetController {
 		sheetViewController.didMove(toParent: mainViewController)
 		let scrollableView = config.scrollableView(self)
 		scrollableView?.panGestureRecognizer.require(toFail: panGesture)
+		scrollableView?.layoutIfNeeded()
 		let initialY = config.initialY(self)
 		sheetViewController.view.frame.origin = CGPoint(x: 0, y: initialY)
 		sheetViewController.view.frame.size = CGSize(
