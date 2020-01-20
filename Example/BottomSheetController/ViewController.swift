@@ -23,6 +23,10 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+	@IBAction func expand(_ sender: Any) {
+		self.bottomSheetController.expand()
+	}
+
 }
 
 extension ViewController: BottomSheetConfiguration {
