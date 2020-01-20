@@ -26,7 +26,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="TuU-2y-abs"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Expand"/>
                                 <connections>
                                     <action selector="expand:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="huP-Iy-TXE"/>
                                 </connections>
