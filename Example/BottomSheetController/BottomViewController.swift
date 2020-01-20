@@ -22,6 +22,7 @@ class BottomViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		self.tableView.backgroundColor = .blue
 		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 		self.tableView.dataSource = self
 	}
@@ -60,6 +61,8 @@ extension BottomViewController: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+		cell.contentView.backgroundColor = .blue
+		cell.textLabel?.textColor = .white
 		cell.textLabel?.text = "Cell \(indexPath.row + 1)"
 		return cell
 	}
