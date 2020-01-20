@@ -27,7 +27,7 @@ class ViewController: UIViewController {
 
 extension ViewController: BottomSheetConfiguration {
 	func initialY(_ bottomSheetController: BottomSheetController) -> CGFloat {
-		return UIScreen.main.bounds.height / 2
+		return maxYBound(bottomSheetController)
 	}
 	func minYBound(_ bottomSheetController: BottomSheetController) -> CGFloat {
 		return 0
